@@ -1,0 +1,67 @@
+class Bullet {
+    // Fields to store the bullet's position and its active state
+    field int x, y;         // Bullet's position
+    field boolean active;   // Indicates whether the bullet is in motion
+
+    // Constructor: Creates a new bullet at a given position
+    constructor Bullet new(int startX, int startY) {
+        let x = startX;      // Set initial x position
+        let y = startY;      // Set initial y position
+        let active = false;  // Bullet starts as inactive
+        return this;
+    }
+
+    // Method to check if the bullet is currently active
+    method boolean isActive() {
+        return active;
+    }
+
+    // Method to activate (fire) the bullet from a given position
+    method void activate(int newX, int newY) {
+        let x = newX;   // Set bullet's starting x position
+        let y = newY;   // Set bullet's starting y position
+        let active = true;  // Mark the bullet as active
+        do draw();  // Draw the bullet on the screen
+        return;
+    }
+
+    // Method to move the bullet forward
+    method void move() {
+        if (active) {  // Only move if the bullet is active
+            do erase();    // Erase previous position before moving
+            let x = x + 6;  // Move bullet to the right (speed = 6 pixels per frame)
+
+            if (x > 512) {  // Check if bullet moves off-screen
+                let active = false;  // Deactivate bullet when it leaves screen
+            } else {
+                do draw();  // Draw the bullet at the new position
+            }
+        }
+        return;
+    }
+
+    // Method to draw the bullet on the screen
+    method void draw() {
+        var int position;// Calculate the memory address for the bullet's pixel
+        let position = 16384 + ((y / 8) * 32) + (x / 16);  
+
+        do Memory.poke(position, -1); // Set the pixel to white (visible bullet)
+        return;
+    }
+
+    // Method to erase the bullet (clear its previous position)
+    method void erase() {
+        var int position;
+        let position = 16384 + ((y / 8) * 32) + (x / 16);
+
+        do Memory.poke(position, 0);  // Set the pixel to black (erased)
+        return;
+    }
+
+    // Method to dispose of the bullet (remove it from memory)
+    method void dispose() {
+        let active = false;  // Deactivate bullet
+        do erase();  // Remove it from the screen
+        return;
+    }
+}

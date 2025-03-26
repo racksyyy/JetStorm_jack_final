@@ -1,0 +1,15 @@
+class Main {
+    // Theentry point of the game
+    function void main() {
+        var Game game;// Declare a variable to hold the game object
+        
+        let game = Game.new();// Create a new instance of the Game class
+        
+        do game.run();// Start running the game loop
+        
+        do game.dispose();// Clean up memory and dispose of the game when it ends
+        
+        return;
+    }
+}
+

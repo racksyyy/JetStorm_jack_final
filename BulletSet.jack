@@ -1,0 +1,66 @@
+class BulletSet {
+    // Fields: Holds a fixed number of bullets
+    field Bullet bullet1, bullet2, bullet3, bullet4, bullet5;
+
+    // Constructor: Creates a set of 5 bullets (initially inactive)
+    constructor BulletSet new() {  
+        let bullet1 = Bullet.new(0, 0);  // Bullet 1
+        let bullet2 = Bullet.new(0, 0);  // Bullet 2
+        let bullet3 = Bullet.new(0, 0);  // Bullet 3
+        let bullet4 = Bullet.new(0, 0);  // Bullet 4
+        let bullet5 = Bullet.new(0, 0);  // Bullet 5
+        return this;
+    }
+
+    // Method to fire a bullet from a given position (x, y)
+    method void fire(int x, int y) {
+        // Check each bullet slot, fire the first inactive bullet
+        if (~bullet1.isActive()) {
+            do bullet1.activate(x, y);
+            do bullet1.draw();
+            return;
+        }
+        if (~bullet2.isActive()) {
+            do bullet2.activate(x, y);
+            do bullet2.draw();
+            return;
+        }
+        if (~bullet3.isActive()) {
+            do bullet3.activate(x, y);
+            do bullet3.draw();
+            return;
+        }
+        if (~bullet4.isActive()) {
+            do bullet4.activate(x, y);
+            do bullet4.draw();
+            return;
+        }
+        if (~bullet5.isActive()) {
+            do bullet5.activate(x, y);
+            do bullet5.draw();
+            return;
+        }
+        return;  // No available bullets (all 5 are active)
+    }
+
+    // Method to move all bullets forward
+    method void move() {
+        do bullet1.move();
+        do bullet2.move();
+        do bullet3.move();
+        do bullet4.move();
+        do bullet5.move();
+        return;
+    }
+
+    // Method to dispose of all bullets
+    method void dispose() {
+        do bullet1.dispose();
+        do bullet2.dispose();
+        do bullet3.dispose();
+        do bullet4.dispose();
+        do bullet5.dispose();
+        do Memory.deAlloc(this);  // Free memory
+        return;
+    }
+}

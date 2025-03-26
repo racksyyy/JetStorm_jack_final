@@ -1,0 +1,102 @@
+class Game {
+    field PlayersJet jet;
+    field BulletSet bullets;
+
+    constructor Game new() {
+        let jet = PlayersJet.new(80, 100);
+        let bullets = BulletSet.new();
+        return this;
+    }
+
+    method void run() {
+        var int key;
+
+        while (true) {
+            let key = Keyboard.keyPressed();
+
+            // Apply gravity once per frame
+            do jet.applyGravity();
+
+            // Move up only when 'W' key is pressed
+            if (key = 87) {
+                do jet.moveUp();
+            }
+
+            // Fire bullets when SPACEBAR is pressed
+            if (key = 32) {
+                do bullets.fire(jet.getX(), jet.getY());
+            }
+
+            // Clear the screen and redraw everything only ONCE per frame
+            do Screen.clearScreen();
+            do jet.draw();   // Draw once
+            do bullets.move();
+
+            // Small delay to make movement smoother
+            do Sys.wait(1);
+        }
+
+        return;
+    }
+
+
+
+    method void dispose() {
+        do jet.dispose();
+        do bullets.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}
+
+class Game {
+    // Fields for player jet and bullets
+    field PlayersJet jet;
+    field BulletSet bullets;
+
+    // Constructor to initialize the game
+    constructor Game new() {
+        let jet = PlayersJet.new(80, 100); // Create player jet at (80, 100)
+        let bullets = BulletSet.new(); // Initialize bullet system
+        return this;
+    }
+
+    // Main game loop
+    method void run() {
+        var int key; // Variable to store key input
+
+        while (true) { // Infinite game loop
+            let key = Keyboard.keyPressed(); // Get user input
+
+            // Apply gravity to the jet every frame
+            do jet.applyGravity();
+
+            // Move the jet up if 'W' key is pressed
+            if (key = 87){
+                do jet.moveUp();
+            }
+
+            // Fire bullets if SPACEBAR (32) is pressed
+            if (key = 32) {
+                do bullets.fire(jet.getX(), jet.getY());
+            }
+
+            do Screen.clearScreen();// Refresh screen by clearing previous frame
+
+            do jet.draw();// Redraw player jet and move bullets
+            do bullets.move();
+            
+            do Sys.wait(1);// Small delay to control game speed
+        }
+
+        return;
+    }
+
+    // Method to clean up memory when the game ends
+    method void dispose() {
+        do jet.dispose(); // Dispose of player jet
+        do bullets.dispose(); // Dispose of bullet system
+        do Memory.deAlloc(this); // Free memory for the Game object
+        return;
+    }
+}

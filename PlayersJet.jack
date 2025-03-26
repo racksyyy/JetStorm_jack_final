@@ -1,0 +1,116 @@
+class PlayersJet {
+    // Fields to store the jet's position and movement speed
+    field int x, y;        // x and y position of the jet
+    field int velocity;    // Vertical velocity for gravity and movement
+
+    // Constructor: Creates a new jet at a given position
+    constructor PlayersJet new(int startX, int startY) {
+        let x = startX;  // Set initial x position
+        let y = startY;  // Set initial y position
+        let velocity = 0; // Jet starts with zero velocity
+        return this;
+    }
+
+    // Getter methods to return the jet's current position
+    method int getX() { return x; }
+    method int getY() { return y; }
+
+    // Method to dispose of the jet and free memory
+    method void dispose() {
+        do erase();  // Remove the jet from the screen
+        do Memory.deAlloc(this);  // Free memory allocated for this object
+        return;
+    }
+
+    // Method to draw the jet on the screen
+    method void draw() {
+        var int position;
+        // Calculate the memory address for the jet's pixel representation
+        let position = 16384 + ((y / 8) * 32) + (x / 16);
+
+        // Draw the jet using Memory.poke to update the screen pixels
+        do Memory.poke(position, 384);
+        do Memory.poke(position + 32, 384);
+        do Memory.poke(position + 64, 384);
+        do Memory.poke(position + 96, 1440);
+        do Memory.poke(position + 128, 1440);
+        do Memory.poke(position + 160, -31327);
+        do Memory.poke(position + 192, -31807);
+        do Memory.poke(position + 224, -32383);
+        do Memory.poke(position + 256, -7801);
+        do Memory.poke(position + 288, -26215);
+        do Memory.poke(position + 320, 2016);
+        do Memory.poke(position + 352, 2016);
+        do Memory.poke(position + 384, -24583);
+        do Memory.poke(position + 416, -7609);
+        do Memory.poke(position + 448, -31135);
+        do Memory.poke(position + 480, -31711);
+
+        return;
+    }
+
+    // Method to erase the jet from the screen (before redrawing)
+    method void erase() {
+        var int position;
+        let position = 16384 + ((y / 8) * 32) + (x / 16);
+
+        // Clear the pixels by setting them to 0
+        do Memory.poke(position, 0);
+        do Memory.poke(position + 32, 0);
+        do Memory.poke(position + 64, 0);
+        do Memory.poke(position + 96, 0);
+        do Memory.poke(position + 128, 0);
+        do Memory.poke(position + 160, 0);
+        do Memory.poke(position + 192, 0);
+        do Memory.poke(position + 224, 0);
+        do Memory.poke(position + 256, 0);
+        do Memory.poke(position + 288, 0);
+        do Memory.poke(position + 320, 0);
+        do Memory.poke(position + 352, 0);
+        do Memory.poke(position + 384, 0);
+        do Memory.poke(position + 416, 0);
+        do Memory.poke(position + 448, 0);
+        do Memory.poke(position + 480, 0);
+
+        return;
+    }
+
+    // Method to move the jet upwards (player-controlled)
+    method void moveUp() {
+        do erase();  // Erase the previous position before moving
+
+        let velocity = -15;  // Apply upward thrust (negative velocity)
+
+        // Ensure the jet doesn't move above the screen
+        if ((y + velocity) < 10) {
+            let y = 10;
+        } 
+        else {
+            let y = y + velocity;
+        }
+
+        do draw();  // Redraw the jet in the new position
+        return;
+    }
+
+    // Method to apply gravity to the jet (automatically pulls it down)
+    method void applyGravity() {
+        do erase();  // Erase the previous position
+
+        let velocity = velocity + 3;  // Increase velocity (fall speed)
+        if (velocity > 15) {  // Limit the maximum falling speed
+            let velocity = 15;
+        }
+
+        let y = y + velocity;  // Move the jet downward
+
+        // Prevent the jet from falling below the screen
+        if (y > 2100) {
+            let y = 2100;
+            let velocity = 0;  // Reset velocity when it hits the ground
+        }
+
+        do draw();  // Redraw the jet in the new position
+        return;
+    }
+}
